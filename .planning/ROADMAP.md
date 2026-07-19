@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. An admin can grant a user a role (Admin / Editor / Consumer) scoped to a specific workspace, and a role in one workspace confers no rights in another.
   4. A logged-in user sees only the workspaces and skills they are authorized for — unauthorized workspaces are absent, and the underlying data model is organization-scoped so a later multi-tenant mode needs no schema redesign.
 
-**Plans**: 3/5 plans executed
+**Plans**: 4/5 plans executed
 **Wave 1**
 
 - [x] 01-01-PLAN.md — Monorepo + toolchain + Docker Compose Postgres scaffold (Wave 1)
@@ -51,7 +51,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-04-PLAN.md — Workspace create + membership-scoped list (Wave 4)
+- [x] 01-04-PLAN.md — Workspace create + membership-scoped list (Wave 4)
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Access Control | 3/5 | In Progress|  |
+| 1. Foundation & Access Control | 4/5 | In Progress|  |
 | 2. Skill Authoring in the Dashboard | 0/TBD | Not started | - |
 | 3. Review & Publish Governance | 0/TBD | Not started | - |
 | 4. Token-Authenticated REST Distribution | 0/TBD | Not started | - |
