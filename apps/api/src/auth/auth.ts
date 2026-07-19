@@ -1,6 +1,12 @@
 import path from "node:path";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { organization } from "better-auth/plugins/organization";
+import { createAccessControl } from "better-auth/plugins/access";
+import {
+  adminAc,
+  defaultStatements,
+} from "better-auth/plugins/organization/access";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 
@@ -29,6 +35,24 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
+// Custom admin/editor/consumer roles, defined here — before any
+// controller/UI code references a role string — per RESEARCH.md Pattern 2 /
+// Pitfall 3: better-auth's org plugin ships default `owner`/`admin`/`member`
+// role labels, and "member" must never leak into apps/web or a DTO (threat
+// T-04-04). better-auth's own `owner` role stays a purely internal
+// implementation detail (RESEARCH.md Open Question 3) — every actual
+// workspace/role read or write in this phase goes through Skillshare's own
+// Tenant/Workspace/Membership tables (WorkspacesService, Plan 05's
+// WorkspaceRoleGuard), not this plugin's own endpoints; registering it here
+// establishes the shared role vocabulary and keeps better-auth's own
+// organization-plugin surface (exposed alongside `/api/auth/*`) from ever
+// surfacing "member" if it's reached directly.
+const statement = { ...defaultStatements } as const;
+const ac = createAccessControl(statement);
+const adminRole = ac.newRole({ ...adminAc.statements });
+const editorRole = ac.newRole({ member: ["update"] });
+const consumerRole = ac.newRole({});
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   emailAndPassword: {
@@ -38,4 +62,14 @@ export const auth = betterAuth({
   // process.env by better-auth's own config resolution; only the
   // dev-vs-prod-variable WEB_ORIGIN needs to be threaded through explicitly.
   trustedOrigins: [process.env.WEB_ORIGIN ?? "http://localhost:5173"],
+  plugins: [
+    organization({
+      ac,
+      roles: {
+        admin: adminRole,
+        editor: editorRole,
+        consumer: consumerRole,
+      },
+    }),
+  ],
 });
