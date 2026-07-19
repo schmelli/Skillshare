@@ -13,10 +13,18 @@ try {
 }
 
 // Prisma 7: datasource url + migrations config live here, not in schema.prisma
-// (RESEARCH.md Pitfall 1). The actual `@prisma/adapter-pg` driver-adapter
-// instance used by the generated PrismaClient at runtime is constructed in
-// `src/prisma/prisma.service.ts` — the CLI (`migrate`/`db push`/`studio`)
-// only needs a connection string, not the adapter instance itself.
+// (RESEARCH.md Pitfall 1).
+//
+// DEVIATION from RESEARCH.md's Code Examples: the installed `@prisma/config@7.8.0`
+// `PrismaConfig` type (re-exported from the `prisma/config` import above) has no
+// `adapter` field — only `datasource: { url, shadowDatabaseUrl }` — so `PrismaPg`
+// cannot be constructed here. Verified directly against
+// node_modules/@prisma/config@7.8.0's dist/index.d.ts and by successfully running
+// `prisma migrate dev --name init` against a live Postgres instance using only
+// `datasource.url` below. The `PrismaPg` driver-adapter instance (mandatory for
+// the query engine at runtime, since Prisma 7 has no Rust engine) is constructed
+// in `src/prisma/prisma.service.ts` instead — the CLI (`migrate`/`db push`/
+// `studio`) only needs a plain connection string, not the adapter instance.
 export default defineConfig({
   schema: path.join("prisma", "schema.prisma"),
   migrations: {
