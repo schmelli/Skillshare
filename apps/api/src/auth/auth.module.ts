@@ -10,11 +10,13 @@ import { SessionGuard } from "./session.guard";
 // request stream before AuthController ever sees it, leaving nothing for
 // `auth.handler` to read. Fastify explicitly supports overriding its
 // built-in JSON/text parsers (not a "custom parser conflict"), so this
-// swaps it for a raw-buffer passthrough, giving AuthController the raw body
-// it needs (RESEARCH.md Pitfall 2). Safe app-wide for this phase since no
-// other route yet consumes a JSON body via `@Body()`; a future phase adding
-// one should scope this to an encapsulated `/api/auth` Fastify plugin
-// instead of overriding it globally.
+// swaps it for a raw-buffer passthrough on `/api/auth/*` only, giving
+// AuthController the raw body it needs (RESEARCH.md Pitfall 2). Every other
+// route (e.g. WorkspacesController's `@Body()`, Plan 04) gets normal JSON
+// parsing — this used to be an unconditional passthrough scoped app-wide
+// "since no other route yet consumes a JSON body via @Body()"; Plan 04's
+// WorkspacesController is that route, so the parser now branches on the
+// request path instead of moving to a separate encapsulated Fastify plugin.
 @Injectable()
 class RawBodyParserInitializer implements OnModuleInit {
   constructor(private readonly adapterHost: HttpAdapterHost) {}
@@ -25,7 +27,21 @@ class RawBodyParserInitializer implements OnModuleInit {
     fastify.addContentTypeParser(
       "application/json",
       { parseAs: "buffer" },
-      (_req, body, done) => done(null, body),
+      (req, body: Buffer, done) => {
+        if (req.url?.startsWith("/api/auth/")) {
+          done(null, body);
+          return;
+        }
+        if (body.length === 0) {
+          done(null, undefined);
+          return;
+        }
+        try {
+          done(null, JSON.parse(body.toString("utf-8")));
+        } catch (error) {
+          done(error as Error, undefined);
+        }
+      },
     );
   }
 }

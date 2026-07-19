@@ -110,6 +110,32 @@ describe("Workspaces (e2e)", () => {
     // The unauthorized workspace's name must never appear in the response
     // body, not even indirectly.
     expect(JSON.stringify(listRes.body)).not.toContain("M&A");
+    // The outsider holds no admin membership anywhere in an
+    // already-populated tenant, so they cannot self-service another
+    // workspace (drives the "No workspaces yet." no-CTA empty state).
+    expect(listRes.body.canCreate).toBe(false);
+  });
+
+  it("denies workspace creation for a user with no admin membership once the tenant already has a workspace (Admin-only mutation, T-04-02)", async () => {
+    const { agent: bootstrapAgent } = await registerAndLogin("bootstrap");
+    await bootstrapAgent
+      .post("/api/workspaces")
+      .set("Origin", TEST_ORIGIN)
+      .send({ name: "Bootstrap Workspace" })
+      .expect(200);
+
+    const { agent: nonAdminAgent } = await registerAndLogin("non-admin");
+    const res = await nonAdminAgent
+      .post("/api/workspaces")
+      .set("Origin", TEST_ORIGIN)
+      .send({ name: "Should Not Exist" });
+
+    expect(res.status).toBe(403);
+
+    const count = await prisma.workspace.count({
+      where: { name: "Should Not Exist" },
+    });
+    expect(count).toBe(0);
   });
 
   it("rejects a duplicate workspace name in the same tenant and creates exactly one row (idempotency)", async () => {

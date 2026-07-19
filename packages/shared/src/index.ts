@@ -5,3 +5,5 @@
 export const SKILLSHARE_SHARED = true;
 
 export * from "./dto/auth";
+export * from "./dto/workspace";
+export * from "./roles";
