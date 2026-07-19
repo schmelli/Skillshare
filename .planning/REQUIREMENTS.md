@@ -31,7 +31,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Workspaces & Roles
 
 - [x] **ORG-01**: Admin can create and manage workspaces (e.g. "Employment Law", "M&A", "Compliance")
-- [ ] **ORG-02**: Admin can grant users per-workspace roles (Admin / Editor / Consumer)
+- [x] **ORG-02**: Admin can grant users per-workspace roles (Admin / Editor / Consumer)
 - [x] **ORG-03**: Users see only the workspaces and skills they are authorized for — in the dashboard and every API
 
 ### Authentication & Tokens
@@ -98,7 +98,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | AUTH-01 | Phase 1 — Foundation & Access Control | Complete |
 | ORG-01 | Phase 1 — Foundation & Access Control | Complete |
-| ORG-02 | Phase 1 — Foundation & Access Control | Pending |
+| ORG-02 | Phase 1 — Foundation & Access Control | Complete |
 | ORG-03 | Phase 1 — Foundation & Access Control | Complete |
 | DEPL-03 | Phase 1 — Foundation & Access Control | Complete |
 | SKIL-01 | Phase 2 — Skill Authoring in the Dashboard | Pending |

@@ -106,3 +106,59 @@ export async function createWorkspace(
 
   return (await response.json()) as WorkspaceListItem;
 }
+
+export interface MemberListItem {
+  userId: string;
+  name: string;
+  email: string;
+  role: WorkspaceRole;
+}
+
+export interface MembersResponse {
+  members: MemberListItem[];
+}
+
+export function getMembers(workspaceId: string): Promise<MembersResponse> {
+  return apiFetch<MembersResponse>(`/api/workspaces/${workspaceId}/members`);
+}
+
+/**
+ * Same pattern as `WorkspaceApiError`: attaches the parsed error body so
+ * `GrantRoleForm` can distinguish "no user found with that email" (400) from
+ * a generic failure.
+ */
+export class MembershipApiError extends ApiError {
+  constructor(
+    status: number,
+    message: string,
+    public readonly body: { message?: string | string[] } | undefined,
+  ) {
+    super(status, message);
+    this.name = "MembershipApiError";
+  }
+}
+
+export async function grantRole(
+  workspaceId: string,
+  targetEmail: string,
+  role: WorkspaceRole,
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/workspaces/${workspaceId}/members`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ targetEmail, role }),
+    },
+  );
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => undefined);
+    throw new MembershipApiError(
+      response.status,
+      `API request to /api/workspaces/${workspaceId}/members failed with status ${response.status}`,
+      body,
+    );
+  }
+}

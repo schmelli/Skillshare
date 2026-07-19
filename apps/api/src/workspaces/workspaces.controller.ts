@@ -7,17 +7,25 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
 } from "@nestjs/common";
 import type { FastifyRequest } from "fastify";
-import { createWorkspaceDto } from "@skillshare/shared";
+import { createWorkspaceDto, grantRoleDto } from "@skillshare/shared";
+import { Roles } from "../auth/roles.decorator";
 import { SessionGuard } from "../auth/session.guard";
+import {
+  WORKSPACE_ACCESS_DENIED_MESSAGE,
+  WorkspaceRoleGuard,
+} from "../auth/workspace-role.guard";
+import { MembershipService } from "./membership.service";
 import { WorkspacesService } from "./workspaces.service";
 
 interface RequestWithUser extends FastifyRequest {
   user: { id: string };
+  params: { workspaceId?: string };
 }
 
 // SessionGuard gates both routes. POST additionally enforces
@@ -33,7 +41,10 @@ interface RequestWithUser extends FastifyRequest {
 @Controller("api/workspaces")
 @UseGuards(SessionGuard)
 export class WorkspacesController {
-  constructor(private readonly workspacesService: WorkspacesService) {}
+  constructor(
+    private readonly workspacesService: WorkspacesService,
+    private readonly membershipService: MembershipService,
+  ) {}
 
   @Get()
   async list(@Req() req: RequestWithUser) {
@@ -73,5 +84,56 @@ export class WorkspacesController {
       );
     }
     return result.workspace;
+  }
+
+  // Both member routes are Admin-only per-workspace (WorkspaceRoleGuard +
+  // @Roles('admin')) — even reading the member list requires the caller to
+  // hold an `admin` Membership row for THIS :workspaceId specifically.
+  // WorkspaceRoleGuard's deny-by-default check runs before either handler
+  // body executes, so a caller with no membership (or a non-admin
+  // membership) in the requested workspace never reaches this code
+  // (T-05-01 IDOR mitigation, ORG-03 non-leak).
+  @Get(":workspaceId/members")
+  @UseGuards(WorkspaceRoleGuard)
+  @Roles("admin")
+  async listMembers(@Param("workspaceId") workspaceId: string) {
+    return { members: await this.membershipService.listMembers(workspaceId) };
+  }
+
+  @Post(":workspaceId/members")
+  @UseGuards(WorkspaceRoleGuard)
+  @Roles("admin")
+  @HttpCode(HttpStatus.OK)
+  async grantRole(
+    @Req() req: RequestWithUser,
+    @Param("workspaceId") workspaceId: string,
+    @Body() body: unknown,
+  ) {
+    const parsed = grantRoleDto.safeParse(body);
+    if (!parsed.success) {
+      throw new BadRequestException(
+        parsed.error.issues[0]?.message ?? "Invalid grant request.",
+      );
+    }
+
+    const result = await this.membershipService.grantRole(
+      req.user.id,
+      workspaceId,
+      parsed.data.targetEmail,
+      parsed.data.role,
+    );
+
+    if (!result.ok) {
+      if (result.reason === "user-not-found") {
+        throw new BadRequestException("No user found with that email.");
+      }
+      // Defense-in-depth: WorkspaceRoleGuard already required `admin` in
+      // this workspace, so this branch should be unreachable in practice —
+      // still returns the same non-leaking denial shape, never a different
+      // status/message that could hint at *why*.
+      throw new ForbiddenException(WORKSPACE_ACCESS_DENIED_MESSAGE);
+    }
+
+    return { ok: true };
   }
 }

@@ -35,6 +35,11 @@ pnpm-debug.log*
 coverage/
 .vite/
 
+# Playwright (generated per test run)
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/blob-report/
+
 # TanStack Router codegen (regenerated on dev/build)
 apps/web/src/routeTree.gen.ts
 
