@@ -60,7 +60,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **DEPL-01**: The full stack starts with a single `docker compose up` (app + database, no external dependencies)
 - [ ] **DEPL-02**: Upgrading to a new Skillshare release runs database migrations automatically and is documented and tested
-- [ ] **DEPL-03**: The data model is organization-scoped from day one so a later cloud/multi-tenant mode requires no schema redesign
+- [x] **DEPL-03**: The data model is organization-scoped from day one so a later cloud/multi-tenant mode requires no schema redesign
 
 ## v2 Requirements
 
@@ -100,7 +100,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ORG-01 | Phase 1 — Foundation & Access Control | Pending |
 | ORG-02 | Phase 1 — Foundation & Access Control | Pending |
 | ORG-03 | Phase 1 — Foundation & Access Control | Pending |
-| DEPL-03 | Phase 1 — Foundation & Access Control | Pending |
+| DEPL-03 | Phase 1 — Foundation & Access Control | Complete |
 | SKIL-01 | Phase 2 — Skill Authoring in the Dashboard | Pending |
 | SKIL-02 | Phase 2 — Skill Authoring in the Dashboard | Pending |
 | SKIL-03 | Phase 2 — Skill Authoring in the Dashboard | Pending |
@@ -132,6 +132,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEPL-02 | Phase 7 — Packaging, Deployment & Upgrade | Pending |
 
 **Coverage:**
+
 - v1 requirements: 34 total (enumerated list; the earlier "32 total" summary was a miscount)
 - Mapped to phases: 34
 - Unmapped: 0 ✓
