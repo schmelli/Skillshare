@@ -1,2 +1,40 @@
 .claude/settings.local.json
 .claude/worktrees/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.output/
+build/
+
+# Turborepo
+.turbo/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Prisma generated client output
+**/generated/prisma/
+**/prisma/generated/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor/OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# Vite / testing
+coverage/
+.vite/
+
+# TanStack Router codegen (regenerated on dev/build)
+apps/web/src/routeTree.gen.ts
+
