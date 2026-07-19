@@ -10,6 +10,12 @@ import { PrismaService } from "../src/prisma/prisma.service";
 // duplicate registration yields exactly one user row; invalid login is
 // ambiguous about which field (email vs password) failed. RED until Task 2
 // mounts better-auth's `/api/auth/*` routes via auth.handler.
+// better-auth's origin-check middleware requires a matching `Origin` header
+// on any cookie-bearing request (its CSRF-hardening default) — mirrors the
+// dashboard's real WEB_ORIGIN (http://localhost:5173) rather than disabling
+// the check for tests.
+const TEST_ORIGIN = "http://localhost:5173";
+
 describe("Auth (e2e)", () => {
   let app: NestFastifyApplication;
   let prisma: PrismaService;
@@ -51,11 +57,13 @@ describe("Auth (e2e)", () => {
 
     const signUpRes = await agent
       .post("/api/auth/sign-up/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password, name: "Test User" });
     expect(signUpRes.status).toBe(200);
 
     const signInRes = await agent
       .post("/api/auth/sign-in/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password });
     expect(signInRes.status).toBe(200);
     expect(signInRes.headers["set-cookie"]).toBeDefined();
@@ -71,11 +79,13 @@ describe("Auth (e2e)", () => {
 
     const firstRes = await request(app.getHttpServer())
       .post("/api/auth/sign-up/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password, name: "First Attempt" });
     expect(firstRes.status).toBe(200);
 
     const secondRes = await request(app.getHttpServer())
       .post("/api/auth/sign-up/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password, name: "Second Attempt" });
     expect(secondRes.status).toBeGreaterThanOrEqual(400);
 
@@ -91,15 +101,18 @@ describe("Auth (e2e)", () => {
 
     await request(app.getHttpServer())
       .post("/api/auth/sign-up/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password: correctPassword, name: "Real User" });
 
     const wrongPasswordRes = await request(app.getHttpServer())
       .post("/api/auth/sign-in/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email, password: wrongPassword });
     expect(wrongPasswordRes.status).toBeGreaterThanOrEqual(400);
 
     const wrongEmailRes = await request(app.getHttpServer())
       .post("/api/auth/sign-in/email")
+      .set("Origin", TEST_ORIGIN)
       .send({ email: nonexistentEmail, password: wrongPassword });
     expect(wrongEmailRes.status).toBeGreaterThanOrEqual(400);
 

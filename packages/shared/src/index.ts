@@ -3,3 +3,5 @@
 // model grows. This keeps `@skillshare/shared` a resolvable workspace dependency
 // from Wave 0 onward.
 export const SKILLSHARE_SHARED = true;
+
+export * from "./dto/auth";

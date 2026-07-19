@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getHealth } from "@/lib/api";
 
-export const Route = createFileRoute("/")({
+// The Walking Skeleton's health landing (Plan 02), moved under the
+// `_authenticated` guarded layout (Plan 03) — reaching the dashboard now
+// requires a valid session.
+export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 
