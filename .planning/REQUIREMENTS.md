@@ -36,7 +36,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Tokens
 
-- [ ] **AUTH-01**: User can register and log in with email and password
+- [x] **AUTH-01**: User can register and log in with email and password
 - [ ] **AUTH-02**: User can create personal access tokens scoped to their permitted workspaces
 - [ ] **AUTH-03**: Tokens have an expiry date and can be revoked immediately by the owner or an admin
 - [ ] **AUTH-04**: Every skill access across all channels (REST, CLI, MCP) enforces workspace permissions — unauthorized requests never receive skill content
@@ -96,7 +96,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 — Foundation & Access Control | Pending |
+| AUTH-01 | Phase 1 — Foundation & Access Control | Complete |
 | ORG-01 | Phase 1 — Foundation & Access Control | Pending |
 | ORG-02 | Phase 1 — Foundation & Access Control | Pending |
 | ORG-03 | Phase 1 — Foundation & Access Control | Pending |
