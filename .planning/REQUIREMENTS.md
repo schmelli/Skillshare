@@ -96,13 +96,46 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmap) | | |
+| AUTH-01 | Phase 1 — Foundation & Access Control | Pending |
+| ORG-01 | Phase 1 — Foundation & Access Control | Pending |
+| ORG-02 | Phase 1 — Foundation & Access Control | Pending |
+| ORG-03 | Phase 1 — Foundation & Access Control | Pending |
+| DEPL-03 | Phase 1 — Foundation & Access Control | Pending |
+| SKIL-01 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| SKIL-02 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| SKIL-03 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| SKIL-04 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| SKIL-05 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| SKIL-07 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| WFLW-01 | Phase 2 — Skill Authoring in the Dashboard | Pending |
+| WFLW-02 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-03 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-04 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-05 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-06 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-07 | Phase 3 — Review & Publish Governance | Pending |
+| WFLW-08 | Phase 3 — Review & Publish Governance | Pending |
+| AUDT-01 | Phase 3 — Review & Publish Governance | Pending |
+| AUTH-02 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| AUTH-03 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| AUTH-04 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| DIST-01 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| DIST-02 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| DIST-05 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| SKIL-06 | Phase 4 — Token-Authenticated REST Distribution | Pending |
+| DIST-03 | Phase 5 — CLI Sync & MCP Server | Pending |
+| DIST-04 | Phase 5 — CLI Sync & MCP Server | Pending |
+| AUDT-02 | Phase 6 — Audit, Analytics & Compliance | Pending |
+| AUDT-03 | Phase 6 — Audit, Analytics & Compliance | Pending |
+| AUDT-04 | Phase 6 — Audit, Analytics & Compliance | Pending |
+| DEPL-01 | Phase 7 — Packaging, Deployment & Upgrade | Pending |
+| DEPL-02 | Phase 7 — Packaging, Deployment & Upgrade | Pending |
 
 **Coverage:**
-- v1 requirements: 32 total
-- Mapped to phases: 0
-- Unmapped: 32 ⚠️
+- v1 requirements: 34 total (enumerated list; the earlier "32 total" summary was a miscount)
+- Mapped to phases: 34
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-19*
-*Last updated: 2026-07-19 after initial definition*
+*Last updated: 2026-07-19 after roadmap creation (traceability populated, count corrected 32 → 34)*

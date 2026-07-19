@@ -1,0 +1,84 @@
+---
+gsd_state_version: '1.0'  # placeholder; syncStateFrontmatter overwrites on first state.* call
+status: planning
+progress:
+  total_phases: 7
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
+---
+
+# Project State
+
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-07-19)
+
+**Core value:** A permission-controlled single source of truth for agent skills: decentralized agents always pull the latest approved version of exactly the skills they are authorized to use.
+**Current focus:** Phase 1 — Foundation & Access Control
+
+## Current Position
+
+Phase: 1 of 7 (Foundation & Access Control)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-07-19 — Roadmap created (7 phases, MVP vertical slicing, 34/34 requirements mapped)
+
+Progress: [░░░░░░░░░░] 0%
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 0
+- Average duration: — min
+- Total execution time: 0.0 hours
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| - | - | - | - |
+
+**Recent Trend:**
+- Last 5 plans: —
+- Trend: —
+
+*Updated after each plan completion*
+
+## Accumulated Context
+
+### Decisions
+
+Decisions are logged in PROJECT.md Key Decisions table.
+Recent decisions affecting current work:
+
+- Roadmap: Structured as 7 MVP vertical slices (foundation → authoring → governance → REST distribution → CLI/MCP → audit/analytics → deployment), reconciling research's risk-ordered layering with vertical end-to-end slicing.
+- Roadmap: Injection-aware content-security scanning (research Pitfall #2) has no v1 requirement — partially served by the Phase 3 diff view; left for the user to add as a requirement or defer to v2.
+
+### Pending Todos
+
+[From .planning/todos/pending/ — ideas captured during sessions]
+
+None yet.
+
+### Blockers/Concerns
+
+[Issues that affect future work]
+
+- Phase 1: Validate the better-auth API-key plugin's workspace-scoping model (recent `referenceId`/`configId` rename) before committing the token/permission schema (research flag).
+- Phase 4/5: MCP streamable-HTTP + PAT-via-header transport needs an integration spike against a real agent host (e.g. Claude Code) before the MCP server is considered done (research flag).
+
+## Deferred Items
+
+Items acknowledged and carried forward from previous milestone close:
+
+| Category | Item | Status | Deferred At |
+|----------|------|--------|-------------|
+| Security | Injection-aware review / content-security scanning of SKILL.md (research Pitfall #2, no v1 requirement) | Undecided — add requirement or defer to v2 | 2026-07-19 (roadmap) |
+
+## Session Continuity
+
+Last session: 2026-07-19 13:32
+Stopped at: ROADMAP.md and STATE.md created; REQUIREMENTS.md traceability updated
+Resume file: None
