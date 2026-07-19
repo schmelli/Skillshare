@@ -1,0 +1,169 @@
+// Prisma 7 schema. Uses the TypeScript-native `prisma-client` generator (NOT the
+// legacy `prisma-client-js`) with an explicit `output` path, per RESEARCH.md
+// Pitfall 1. The Postgres connection string and driver-adapter wiring live in
+// `prisma.config.ts` / `src/prisma/prisma.service.ts`, not here.
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- Skillshare org-scoped identity model (DEPL-03) --------------------------
+// Tenant -> Workspace -> Membership(role). Tenant exists from the first
+// migration so a future multi-tenant SaaS mode needs no backfill/schema
+// redesign, even though v1 self-hosted seeds exactly one Tenant row.
+
+model Tenant {
+  id         String      @id @default(cuid())
+  name       String
+  createdAt  DateTime    @default(now())
+  workspaces Workspace[]
+
+  @@map("tenant")
+}
+
+model Workspace {
+  id          String       @id @default(cuid())
+  tenantId    String
+  tenant      Tenant       @relation(fields: [tenantId], references: [id])
+  name        String
+  createdAt   DateTime     @default(now())
+  memberships Membership[]
+
+  @@unique([tenantId, name])
+  @@map("workspace")
+}
+
+model Membership {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id])
+  role        WorkspaceRole
+  createdAt   DateTime      @default(now())
+
+  @@unique([userId, workspaceId])
+  @@map("membership")
+}
+
+enum WorkspaceRole {
+  admin
+  editor
+  consumer
+}
+
+// --- better-auth core tables --------------------------------------------------
+// Mirrors better-auth 1.6.x's own generated Prisma fragment for the core
+// email/password + session + organization-plugin tables (RESEARCH.md Code
+// Examples / Open Question 1). `Membership` above is Skillshare's own
+// per-workspace-role table; better-auth's `Member`/`Organization` tables are
+// kept alongside for the auth plugin's own multi-membership/session bookkeeping
+// and are not yet wired to Tenant/Workspace in this plan.
+
+model User {
+  id            String       @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
+  memberships   Membership[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id                   String   @id
+  expiresAt            DateTime
+  token                String
+  createdAt            DateTime
+  updatedAt            DateTime
+  ipAddress            String?
+  userAgent            String?
+  activeOrganizationId String?
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Organization {
+  id          String       @id
+  name        String
+  slug        String?
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+
+  @@unique([slug])
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String
+  createdAt      DateTime
+
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
+}
