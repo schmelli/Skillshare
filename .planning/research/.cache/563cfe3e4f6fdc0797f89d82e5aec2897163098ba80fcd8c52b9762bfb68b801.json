@@ -1,0 +1,1 @@
+{"content":"better-auth Prisma adapter: prismaAdapter(prisma,{provider:'postgresql'}); Prisma 7 requires custom output path, no longer generates in node_modules by default; schema generated via 'npx auth generate'.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-07-19T15:22:29.599Z","ttl":86400000,"kind":"docs"}

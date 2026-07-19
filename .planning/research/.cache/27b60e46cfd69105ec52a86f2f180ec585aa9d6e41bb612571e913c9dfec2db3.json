@@ -1,0 +1,1 @@
+{"content":"Prisma 7: provider='prisma-client' (not prisma-client-js), output path required, Rust engine removed, driver adapter (@prisma/adapter-pg for Postgres) mandatory, datasource url/directUrl move to prisma.config.ts.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-07-19T15:22:29.826Z","ttl":86400000,"kind":"docs"}
