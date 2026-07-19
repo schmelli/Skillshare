@@ -269,3 +269,7 @@ None — no external service configuration required for this plan. `apps/api/.en
 ---
 *Phase: 01-foundation-access-control*
 *Completed: 2026-07-19*
+
+## Self-Check: PASSED
+
+All 12 referenced files (schema, config, services, tests, migration, web lib, this SUMMARY) confirmed present on disk; all 5 referenced commit hashes (`b739da9`, `44ab401`, `5a8bf15`, `8afba7b`, `cec7da5`) confirmed present in `git log`.
