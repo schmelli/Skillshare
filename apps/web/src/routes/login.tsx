@@ -34,7 +34,9 @@ const AMBIGUOUS_LOGIN_ERROR =
 const GENERIC_ERROR =
   "Something went wrong. Please try again — if this keeps happening, contact your admin.";
 
-function LoginPage() {
+// Exported (not just via `Route.options.component`) so component tests can
+// render it in isolation without needing the full generated route tree.
+export function LoginPage() {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
