@@ -35,3 +35,6 @@ pnpm-debug.log*
 coverage/
 .vite/
 
+# TanStack Router codegen (regenerated on dev/build)
+apps/web/src/routeTree.gen.ts
+
