@@ -1,7 +1,7 @@
-// Prisma 7 schema. Uses the TypeScript-native `prisma-client` generator (NOT the
-// legacy `prisma-client-js`) with an explicit `output` path, per RESEARCH.md
-// Pitfall 1. The Postgres connection string and driver-adapter wiring live in
-// `prisma.config.ts` / `src/prisma/prisma.service.ts`, not here.
+// Prisma 7 schema. Uses the TypeScript-native `prisma-client` generator (NOT
+// the legacy JS-engine generator) with an explicit `output` path, per
+// RESEARCH.md Pitfall 1. The Postgres connection string and driver-adapter
+// wiring live in `prisma.config.ts` / `src/prisma/prisma.service.ts`, not here.
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
